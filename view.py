@@ -13,13 +13,12 @@ class FormsView(TemplateView):
     form_class_dict - словарь, в котором ключ-префикс, значение-форма или формсет.
     instance_dict - словарь instance для форм, в котором ключ-префикс, значение-instance.
     Если instance_dict не содержит instance для формы, то в качестве instance будет использован
-    object.
+    результат метода get_object.
     
     """
     
     form_class_dict = {}
     instance_dict = {}
-    object = None
     success_url = None
 
     def get_form_class_dict(self):
@@ -31,8 +30,11 @@ class FormsView(TemplateView):
     def get_instance_dict(self):
         return self.instance_dict.copy()
         
+    def get_object(self):
+        return None
+        
     def get_instance(self, key):
-        return self.get_instance_dict().get(key, self.object)
+        return self.get_instance_dict().get(key, self.get_object())
 
     def get_kwargs_form(self, key, **kwargs):
         kwargs.update({'instance':self.get_instance(key), 'prefix':key})
